@@ -28,8 +28,7 @@ public class Key {
 	 * 
 	 */
 	public void generateSubsets(){
-		// we know we'll have 3 at the max.
-		// It ain't elegant, or efficient, but it gets the job done.
+
 		if (attributes.size() > 1){
 			ArrayList<Attribute> hs1 = new ArrayList<Attribute>();
 				ArrayList<Attribute> hs2 = new ArrayList<Attribute>();

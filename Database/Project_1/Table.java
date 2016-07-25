@@ -28,13 +28,8 @@ public class Table {
 	private String notTwoNF_Cause;  // unallowed dependencies, e.g., K1->B
 	private String notThreeNF_Cause;  // unallowed dependencies, e.g., list of deps
 	
-	//Well, I guess we'll store here because it doesn't make sense to store in Attribute
-	// This is two to one FDs among nonkey attributes from 3NF test
-	// Could TODO Actually could rewrite 3NF checks now to use intraNkaDeps
 	ArrayList<ArrayList<String>> nkaTwoToOneFDs = null;  
 	
-	//New approach to storing dependencies.  Uses a new class, 
-	// FunctionalDependency. Keys to the hashtable are LHS of dependencies.
 	Hashtable<String,FunctionalDependency> ksubToNkaDeps;   // for 2NF test
 	Hashtable<String,FunctionalDependency> intraNkaDeps;	// for 3NF test
 	
@@ -81,10 +76,6 @@ public class Table {
 		this(t.getTableName(),t.getKey(),t.getForeignKey(),t.getNonKeyAttributes());
 	}
 	
-//	public Table(String name, Key key){
-//		this(name);
-//		this.primaryKey = key;
-//	}
 	
 	public boolean containsPKeyAttribute(String s){
 		boolean found = false;
@@ -491,9 +482,6 @@ public class Table {
 	 * @param twoNFDecomposition the twoNFDecomposition to set
 	 */
 	public void setTwoNFDecomposition(ArrayList<Table> twoNFDecomposition) {
-//		System.out.println("in setTwoNFDecomp: ");
-//		for (Table t : twoNFDecomposition)
-//			System.out.println(t);
 		this.twoNFDecomposition = twoNFDecomposition;
 	}
 	

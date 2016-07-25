@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 public class Reporter {
-
-//	private ArrayList<String> reason = null;
  
 	private DBConnection dbconn;
 	
@@ -18,11 +16,7 @@ public class Reporter {
 		
 		this.tables = tables;
 		this.dbconn = dbconn;
-		//createTable();
 		
-		// Write summary table
-//		for (Table tbl : tables)
-//			System.out.println(tbl.getTableName());
 		writeSummary();
 		
 		writer.close();
@@ -68,31 +62,18 @@ public class Reporter {
 					else if(t.getNormForm().equals("2NF"))
 					{  
 
-//						System.out.println(t.getTableName() + " is in 2NF");
-
-//						reason = t.getTwoNFDependencies();
-						
-//						System.out.println("reason: " + reason);
-
 						Hashtable<String,FunctionalDependency> twoNFfds = t.getIntraNkaDeps();
-//						String s = parseDependencies(reason);
+
 						String s = getFDString(twoNFfds);
 
 						writeToFile(nm +"	 " + " 3NF "  +"      " + " N "  +"      " + " 2NF but " + s );
-						//insertIntoTable(i, t.getTableName(), "3NF", "N", "is in 2NF but " + s);
-						//					System.out.println("reason: " + s);
+
 					}
 					else if (t.getNormForm().equals("1NF"))
 					{
-//						System.out.println(t.getTableName() + " is in 1NF");
-
-//						reason = t.getOneNFDependencies(); 
-//						System.out.println("writeSummary: reason: " + reason);
 						
 						Hashtable<String,FunctionalDependency> oneNFfds = t.getKsubToNkaDeps();
 						String s = getFDString(oneNFfds);
-
-//						String s = parseDependencies(reason);
 
 						writeToFile(nm +"   " + " 3NF "  +"      " + " N "  +"      " + " 1NF but " + s );
 						//insertIntoTable(i, t.getTableName(), "3NF", "N", "is in 1NF but " + s);
@@ -116,12 +97,8 @@ public class Reporter {
 //				System.out.println("table: " + t.getTableName());
 
 				if (t.isVerified()){
-//					System.out.println("table: " + t.getTableName());
-					ArrayList<Table> dc;
-//					System.out.println("is1NF: " + t.isOneNF());
-//					System.out.println("is2NF: " + t.isTwoNF());
-//					System.out.println("is3NF: " + t.isThreeNF());
 
+					ArrayList<Table> dc;
 
 					if ((t.isTwoNF()) && !(t.isThreeNF())){
 
@@ -151,15 +128,8 @@ public class Reporter {
 						writeToFile("Verification:");
 						writeToFile("  " + t.getTableName() + join);
 
-						// TODO One NF verification
-						// for each table in dc
-						//   create tables in the database using projection
-						// join the tables
-						// count rows in joined table
-						// if t # rows = joined table # rows, they match
+
 					}
-					// Test dc tables.   Create in DB. Join new tables. See if # rows in joined = # rows in original
-					// Print result. Example:  R = join(R1,R2) ? YES
 				} // end if is verified
 			} // end for tables t
 		} // end try
@@ -190,38 +160,5 @@ public class Reporter {
 		return all.substring(0,all.length()-2);
 	}
 	
-//	private String parseDependencies(ArrayList<String> reason2) {
-//		System.out.println("reason: " + reason2);
-//		
-//		String s = "";
-//		char left1, left2;
-//
-//		for (String r : reason2){
-//			System.out.println("r: " + r);
-//			String k = "";
-//			if (r.length() == 3){
-//				System.out.println("r = 3: " + r);
-//				System.out.println("charAt(0: "+r.charAt(0));
-//				System.out.println("charAt(1: "+r.charAt(1));
-//				System.out.println("charAt(2: "+r.charAt(2));
-//				
-//				left1 = r.charAt(0);
-//				left2 = r.charAt(1);
-//
-//				k = k +  left1 + left2 + " -> " + r.charAt(2); 
-//			}
-//			else if(r.length() == 2)
-//			{
-//				k = k + r.charAt(0) + " -> " + r.charAt(1);
-//			}
-//			if(!s.contains(k)) {
-//				s += ", " + k;
-//			}		
-//		}
-//		System.out.println("s: " + s);
-//		s = s.substring(1);
-//		
-//		return s;
-//	}
 
 }

@@ -30,11 +30,6 @@ public class FunctionalDependency {
 	/**
 	 * @param left the left to set
 	 */
-//	public void setLeft(ArrayList<String> left){
-//		for (String l : left){
-//			this.addLeft(l);
-//		}
-//	}
 	
 	public void addLeft(String lhs){
 		left.add(lhs);

@@ -21,8 +21,6 @@ public class CertifyNF {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		// hmm. Going to store a new instance of NFAnalyzer for each table (for now).
 		analyzers = new Vector<NFAnalyzer>();
 		// get filename argument from command line
 		String inputArg;
@@ -47,18 +45,11 @@ public class CertifyNF {
 		else
 			inputFilename = inputArg;
 		
-		//DEBUG
-//		System.out.println(inputFilename);
-		
-		// read the file and create Table list (Vector)
 		getInput(inputFilename);
 		
-		// for each Table, Analyze the table
 		boolean verified = false;
 		for (Table t : tables){
-			//DEBUG
-//			System.out.println("Table: " + t.getTableName());
-//			System.out.println(t);
+		
 			System.out.println("\nVerifying table schema against database: " + t);
 			try {
 				verified = dbconn.verifyTable(t);
@@ -70,7 +61,7 @@ public class CertifyNF {
 				t.setVerified(true);
 				NFAnalyzer analyzer = new NFAnalyzer(t,dbconn);
 				analyzers.add(analyzer);
-				//t.setSQLScript(analyzer.getSQLScript()); 
+		
 				System.out.println("Testing for 1NF");
 				boolean isOneNF = analyzer.isOneNF();
 
@@ -80,18 +71,12 @@ public class CertifyNF {
 				if(isOneNF)
 				{
 					t.setNormForm("1NF");
-					//TODO
-//					System.out.println("Table " + t.getTableName() + " is in 1NF\n");
 					
 					System.out.println("Testing for 2NF");
 					boolean isTwoNF = analyzer.isTwoNF();
 
 				      if (isTwoNF){
 				    	  t.setNormForm("2NF");
-//				    	  System.out.println("Table " + t.getTableName() + " is in 2NF\n");
-				      
-				
-					//    if 3NF // check 3NF
 				    	  
 				    	  System.out.println("Testing for 3NF");
 					      if (analyzer.isThreeNF()){
@@ -100,15 +85,11 @@ public class CertifyNF {
 					      }
 					      else {
 //					    	  System.out.println("Table " + t.getTableName() + " is not in 3NF\n");
-//					          // TODO
+
 					    	  ts = analyzer.decomposeTable(2);
-					    	  //TEST
-//					    	  analyzer.decomposeTable(2);
+
 					    	  t.setTwoNFDecomposition(ts);
 					    	  t.setDecompverified(analyzer.analyzeDecomposition());
-					    	  // test
-//					    	  for (Table it : ts)
-//					    		  System.out.println(it);
 					      } // end if 3NF
 					
 				      }
@@ -119,19 +100,12 @@ public class CertifyNF {
 				    	  t.setOneNFDecomposition(ts);
 				    	  t.setDecompverified(analyzer.analyzeDecomposition());
 
-//				    	  for(int i = 0; i < t.getTwoNFDependencies().size(); i++)
-//				    	  {
-//				    		  System.out.println("dependencies " + t.getTwoNFDependencies().get(i));
-//				    	  }
 				      } // end if 2NF
-					// TODO
-					//    decompose 1NF table
+
 				}
 				else // not 1NF
 				{
-//					System.out.println("Table " + t.getTableName() + " is NOT in 1NF");
-					//TODO
-					//decompose UNF table
+
 				}// end if isOneNF
 			
 				
@@ -150,11 +124,6 @@ public class CertifyNF {
 		System.out.println("Writing report file: NF.txt");
 		Reporter reporter = new Reporter(tables, dbconn);
 		
-		// DEBUG:
-//		System.out.println("Table classes");
-//		for (Table t : tables){
-//			System.out.println(t);
-//		}
 		
 		try {
 			dbconn.closeConnection();

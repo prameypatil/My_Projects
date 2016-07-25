@@ -60,10 +60,6 @@ public class NFAnalyzer {
 		else
 			return false;
 		
-//		System.out.println("original normform: " + originalTable.getNormForm());
-//		for (Table t : tables){
-//			System.out.println("table: "+t);
-//		}
 		int numtables = tables.size();
 		ArrayList<String> tnames = new ArrayList<String>();
 		// create tables in db
@@ -137,15 +133,7 @@ public class NFAnalyzer {
 							tcommon.add(t2names.get(z));
 					}
 			
-//			for (String com : tcommon){
-//				System.out.println("comm: " +com);
-//			}
-//			for (String t1 : t1names){
-//				System.out.println("t1: " +t1);
-//			}
-//			for (String t2 : t2names){
-//				System.out.println("t2: " +t2);
-//			}
+
 			tcombonames.addAll(t1names);
 			tcombonames.addAll(t2names);
 			String joinselectlist = "";
@@ -168,15 +156,7 @@ public class NFAnalyzer {
 			String jointable = "create table " + joinname + " as \n" +
 					"select " + joinselectlist + " from " + t1name + " inner join " + t2name +
 					"\n on (" + joinatts + ");";
-//			System.out.println("jointable: " + jointable);
-			
-			
-			
-//			create table hptestjoin as
-//	  		select hp2Mixed1.k1, hp2Mixed1.k2, hp2Mixed1.a, hp2Mixed2.d, hp2Mixed2.b, hp2Mixed2.c
-//	  		from hp2Mixed1 inner join hp2Mixed2 on 
-//	  		(hp2Mixed1.k1=hp2Mixed2.k1 and hp2Mixed1.k2=hp2Mixed2.k2);
-			
+//			System.out.println("jointable: " + jointable);			
 			
 			String size1s, size2s;
 			size1s = "select count(*) from " + originalTable.getTableName() + ";";
@@ -188,8 +168,6 @@ public class NFAnalyzer {
 			sqlScript.add(size2s);
 
 
-			
-			
 			counter += 1;
 			if (tables.size() <= counter+1){
 				done = true;
@@ -250,24 +228,24 @@ public class NFAnalyzer {
 	// EXPERIMENT *********************************************************
 	
 	public ArrayList<Table> decomposeTable(int nflevel){
-//		
-//	
+		
+	
 		Collection<FunctionalDependency> fds = null;
 		if (nflevel == 1)
 			fds = originalTable.getKsubToNkaDeps().values();
 		else if (nflevel == 2)
 			fds = originalTable.getIntraNkaDeps().values();
-//
+
 		ArrayList<FunctionalDependency> fdarray = new ArrayList<FunctionalDependency>();
 		
 		for (FunctionalDependency fa : fds){
 			fdarray.add(fa);
 		}
-//		
+		
 //		System.out.println("FDs for this table: ");
 //		for (FunctionalDependency fb : fds)
 //			System.out.println("fd: " + fb);
-//		
+		
 		int numfds = fds.size();
 		
 //		System.out.println("array size: " + fdarray.size());
@@ -326,18 +304,7 @@ public class NFAnalyzer {
 //		int twomax = 0;
 //		int twomin = 0;		
 		ArrayList<FunctionalDependency> twoMinMax = new ArrayList<FunctionalDependency>();
-//		for (int c = 0; c < two.size(); c++){
-//			int sizerc = two.get(c).getRight().size();
-//			if (sizerc > twomax){
-//				twomax = sizerc; 
-//				twomin = two.get(c).getLeft().size();
-//			}
-//			else if (sizerc == twomax){
-//				if (two.get(c).getLeft().size() < twomin){
-//					twomin = two.get(c).getLeft().size();
-//				}
-//			}
-//		}
+
 		for (FunctionalDependency fd : two)
 //			if (fd.getLeft().size() == twomin && fd.getRight().size() == twomax)
 				twoMinMax.add(fd);
@@ -568,18 +535,11 @@ public class NFAnalyzer {
 		// END STEP 5------------------------------
 		
 		// STEP 6------------------------------
-		// Now we're **REALLY** on shaky ground
-		
 		// set up tables
 		ArrayList<Table> ts = new ArrayList<Table>();
 		Table t0 = new Table(originalTable);
 		t0.setName(originalTable.getTableName() + "1");
 		ts.add(t0);
-//		System.out.println("to: "+ ts.get(0));
-		
-//		//			System.out.println("HERE");
-//		//			System.out.println("t: " + t);
-//		ts.add(t)
 		//------------------------------
 		
 		for (int shit=0; shit < remainder.size(); shit++)
@@ -589,25 +549,17 @@ public class NFAnalyzer {
 
 		for (int i = 0; i < remainder.size(); i++){
 			ArrayList<FunctionalDependency> l = remainder.get(i);
-//			System.out.println("i " + i);
-//			System.out.println("l: " + remainder.get(i));
 			for (int j = i+1; j < remainder.size(); j++){
-//				System.out.println("j " + j);
 
 				ArrayList<FunctionalDependency> h = remainder.get(j);
-//				System.out.println("h: " + remainder.get(j));
 
 				for (int k = 0; k < l.size(); k++){
 					FunctionalDependency sub = l.get(k);
 					for (int m = 0; m < h.size(); m++){
 						FunctionalDependency sup = h.get(m);
-//						System.out.println("sub: "+sub);
-//						System.out.println("sup: " +sup);
 						if (!sup.isSuperset()){
 //							System.out.println("sup is super? " + sup.isSuperset());
 							if (sub.isContainedIn(sup)){
-//								System.out.println("sub in super? " + sub.isContainedIn(sup));
-//								System.out.println("sup is super now? " + sup.isSuperset());
 
 								ArrayList<String> leftover = sup.minus(sub);
 								for (String v : leftover){
@@ -629,11 +581,7 @@ public class NFAnalyzer {
 //					System.out.println("remnant: " + remnant);
 
 				}
-		
-//		System.out.println("finalset: " + finalset);
-//		for (FunctionalDependency it : finalset)
-//			System.out.println("what the #$#$ did we get?  " + it);
-		
+				
 		int tnum = 2;
 //		System.out.println("t0): "+ts.get(0));
 		for (int yo = 0; yo < finalset.size(); yo++){
@@ -689,204 +637,6 @@ public class NFAnalyzer {
 	// END EXPERIMENT******************************************************
 	
 	
-	
-//	public ArrayList<Table> decomposeTable(int nflevel){
-////		
-////	
-//		Collection<FunctionalDependency> fds = null;
-//		if (nflevel == 1)
-//			fds = originalTable.getKsubToNkaDeps().values();
-//		else if (nflevel == 2)
-//			fds = originalTable.getIntraNkaDeps().values();
-////
-//		ArrayList<FunctionalDependency> fdarray = new ArrayList<FunctionalDependency>();
-//		
-//		for (FunctionalDependency fa : fds){
-//			fdarray.add(fa);
-//		}
-////		
-////		for (FunctionalDependency fb : fds)
-////			System.out.println("fd: " + fb);
-////		
-//		int numfds = fds.size();
-//		
-//		int maxi = 0;
-//		int maxval = 0;
-//		int sizel = 0;
-//		for (int c = 0; c < fdarray.size(); c++){
-//			int sizerc = fdarray.get(c).getRight().size();
-//			if (sizerc > maxval){
-//				maxval = sizerc;
-//				maxi = c;
-//				sizel = fdarray.get(maxi).getLeft().size();
-//			}
-//			else if (sizerc == maxval){
-//				if (fdarray.get(c).getLeft().size() < sizel){
-//					maxi = c;
-//					sizel = fdarray.get(maxi).getLeft().size();
-//					
-//				}
-//			}
-//		}
-//		
-//		// EXPERIMENT1
-//		ArrayList<FunctionalDependency> two = new ArrayList<FunctionalDependency>();
-//		ArrayList<FunctionalDependency> three = new ArrayList<FunctionalDependency>();
-//		ArrayList<FunctionalDependency> four = new ArrayList<FunctionalDependency>();
-//		ArrayList<FunctionalDependency> five = new ArrayList<FunctionalDependency>();
-//		ArrayList<FunctionalDependency> six = new ArrayList<FunctionalDependency>();
-//
-//		// separate fds by set size
-//		for (FunctionalDependency afd : fds){
-//			int setsize = afd.getSet().size();
-//			switch (setsize) {
-//				case 2: two.add(afd);
-//						break;
-//				case 3: three.add(afd);
-//						break;
-//				case 4: four.add(afd);
-//						break;
-//				case 5: five.add(afd);
-//						break;
-//				case 6: six.add(afd);
-//						break;
-//				default:break;
-//			}
-//		}
-//		
-//		// find/mark where set S1 == S2.
-//		
-//		if (!two.isEmpty()){
-//			if (two.size() > 1){
-//				for (int i = 0; i < two.size(); i++){
-//					for (int j = i + 1; j < two.size(); j++){
-//						if (!two.get(j).isSixOfOne()){
-//							if (two.get(i).matches(two.get(j))){
-//								four.get(j).setSixOfOne(true);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		if (!three.isEmpty()){
-//			if (three.size() > 1){
-//				for (int i = 0; i < three.size(); i++){
-//					for (int j = i + 1; j < three.size(); j++){
-//						if (!three.get(j).isSixOfOne()){
-//							if (three.get(i).matches(three.get(j))){
-//								three.get(j).setSixOfOne(true);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		if (!four.isEmpty()){
-//			if (four.size() > 1){
-//				for (int i = 0; i < four.size(); i++){
-//					for (int j = i + 1; j < four.size(); j++){
-//						if (!four.get(j).isSixOfOne()){
-//							if (four.get(i).matches(four.get(j))){
-//								four.get(j).setSixOfOne(true);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		if (!five.isEmpty()){
-//			if (five.size() > 1){
-//				for (int i = 0; i < five.size(); i++){
-//					for (int j = i + 1; j < five.size(); j++){
-//						if (!five.get(j).isSixOfOne()){
-//							if (five.get(i).matches(five.get(j))){
-//								five.get(j).setSixOfOne(true);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		if (!six.isEmpty()){
-//			if (six.size() > 1){
-//				for (int i = 0; i < six.size(); i++){
-//					for (int j = i + 1; j < six.size(); j++){
-//						if (!six.get(j).isSixOfOne()){
-//							if (six.get(i).matches(six.get(j))){
-//								six.get(j).setSixOfOne(true);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		// for each set, if countNotSixOfOne > 1, check for subsets
-//		int cnso = countNotSixOfOne(two);
-//		if (cnso > 1){
-//			for (int i = 0; i < two.size(); i++){
-//				for (int j = i + 1; j < two.size(); j++){
-//					if (!six.get(j).isSixOfOne()){
-//						if (six.get(i).matches(six.get(j))){
-//							six.get(j).setSixOfOne(true);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		// END EXPERIMENT1
-////		
-//		FunctionalDependency it = fdarray.get(maxi);
-//								
-//		ArrayList<Table> ts = new ArrayList<Table>();
-//		Table t0 = new Table(originalTable);
-//		t0.setName(originalTable.getTableName() + "1");
-//		ts.add(t0);
-//		String name = originalTable.getTableName() + "2";
-//		Table t = new Table(name);
-//		//			System.out.println("HERE");
-//		//			System.out.println("t: " + t);
-//		ts.add(t);
-//		//		}
-//			
-//		ArrayList<String> left = it.getLeft();
-//		ArrayList<String> right = it.getRight();
-//		
-//		for (String l : left){
-//			ts.get(1).addKeyAttribute(l);
-//			if (!keyAttNames.contains(l))
-//				ts.get(0).removeAttribute(l);
-//		}
-//		for (String r : right){
-//			ts.get(1).addNonKeyAttribute(r);
-//			if (!keyAttNames.contains(r))
-//				ts.get(0).removeAttribute(r);
-//		}
-//		for (String k : keyAttNames){
-//			if (!ts.get(1).getAllAttributeNames().contains(k)){
-//				ts.get(1).addFKeyAttribute(k);
-//			}
-//		}
-//		
-////		for (Table tbl : ts)
-////			System.out.println("in decompose, table: " + tbl.getTableName());
-//		return ts;
-//
-//	}
-//	
 	private int countNotSixOfOne(ArrayList<FunctionalDependency> afd){
 		int count = 0;
 		for (FunctionalDependency fd : afd)
@@ -896,102 +646,9 @@ public class NFAnalyzer {
 	}
 	
 	
-//	public ArrayList<Table> decomposeTwoNF(){
-		// Could TODO - rewrite method to use FunctionalDependency list
-		
-		
-		
-		
-		// There are dependencies among the non-key attributes, so we're not 3NF
-//		ArrayList<Attribute> nkas = originalTable.getNonKeyAttributes();
-		//Assess dependencies
-//		
-//		Attribute a, b;
-//		int maxDetermines = 0, maxDeterminedBy = 0;
-//		int i;
-//		for (i = 0; i < nkas.size()-1; i++){
-//			for (int j=i+1; j < nkas.size()-1; j++){
-//				// well, I guess I'll look at numbers since I no longer have time to do 
-//				// some deep analysis.  Klugey, very klugey.
-//				a = nkas.get(i);
-//				ArrayList<String> ad = a.getDetermines();
-//				//			ArrayList<String> adby = a.getDeterminedBy();
-//				b = nkas.get(j);
-//				ArrayList<String> bd = b.getDetermines();
-//				//			ArrayList<String> bdby = b.getDeterminedBy();
-//				if (ad.size() >= bd.size()){
-//					maxDetermines = i;
-//				}
-//				else{
-//					maxDetermines = j;
-//				}
-//			}
-//		}
-//		
-//		Attribute dmax = nkas.get(maxDetermines);
-//
-//		Attribute maxatt;
-//		String s;
-////		System.out.println("dmax: " + dmax.getName());
-//		
-////		System.out.println("maxatt: " + maxatt.getName());
-//		ArrayList<String> group = dmax.getDetermines();
-////	
-//		for (String st : group){
-////			System.out.println("group: " + st);
-//		}
-//		
-//		ArrayList<String> mynka = new ArrayList<String>();
-//		for (String it : nonKeyAttNames)
-//			mynka.add(it);
-//		
-//		Table t1 = new Table(originalTable.getTableName() + "1");
-//		Table t2 = new Table(originalTable.getTableName() + "2");
-//	
-//		for (String g : group){
-//			for (int k=0; k < mynka.size(); k++){
-//				if (mynka.get(k).equals(g) || mynka.get(k).equals(dmax.getName()))
-//					mynka.remove(k);
-//			}
-//		}
-//		
-//		for (String key: keyAttNames){
-//			t1.addKeyAttribute(key);
-//			t2.addFKeyAttribute(key);
-////			System.out.println("key: " + key);
-//		}
-//		
-//		t2.addKeyAttribute(dmax.getName());
-//		
-//		for (String my : mynka)
-//			t1.addNonKeyAttribute(my);
-//		
-//		for (String gr : group)
-//			t2.addNonKeyAttribute(gr);
-//		
-////		System.out.println(t1);
-////		System.out.println(t2);
-//		ArrayList<Table> ts = new ArrayList<Table>();
-//		ts.add(t1);
-//		ts.add(t2);
-//		
-//		originalTable.setTwoNFDecomposition(ts);
-//		return ts;
-			
-//	}
-	
 	public boolean isThreeNF(){
-		// uncomment the next if not testing
-//		sqlScript.add("\n3NF Analysis\n");
 		if (originalTable.isTwoNF()){
-			// get nonkey attributes
-			// check for dependencies among them
-			// if not found, 
-			//     we're 3NF
-			// else 
-			//     we're not 3NF
-			//
-			//		    System.out.println("BEFORE call to getOneToOneFDs. tableName = " + tableName);
+
 			boolean oneToOneFDs = false, twoToOneFDs = false;
 			if (numNonKeyAtts > 1){
 				// check for single dependencies of the form A -> B
@@ -1195,14 +852,6 @@ public class NFAnalyzer {
 		//	System.out.println("IN isOneNF");
 		boolean distinct = false;
 
-		//		sqlScript.add("\n1NF Analysis\n");
-
-		//		System.out.println("numKeyAtts: " + numKeyAtts);
-
-		// first make sure there is data in the table
-
-//		System.out.println("WHAT???");
-
 		String n = "select count(*) from " + tableName + ";";
 //		System.out.println(tableName);
 		int noOfRows = 0;
@@ -1219,17 +868,6 @@ public class NFAnalyzer {
 //		System.out.println("noOfRows: " + noOfRows);
 		if (noOfRows > 0){
 			for (String key : keyAttNames){
-				//			System.out.println("attribute key: ? "+ key);
-
-				//			System.out.println("originalTable.getTableName(): " + originalTable.getTableName());
-				// why is this line here?
-//				String stmt = select + from + originalTable.getTableName();
-//				sqlScript.add(stmt);
-//				ResultSet rs = dbconn.executeQuery(stmt);
-
-
-				//			System.out.println("noOfRows?? " + noOfRows);
-				//			System.out.println("****************************************");
 
 				String statement = select + " from " + originalTable.getTableName() + where + key + " is null";
 				formatSQL(statement);
@@ -1253,9 +891,6 @@ public class NFAnalyzer {
 								count = rs.getInt("count");
 //									System.out.println("count?? " + count);
 							}
-//									System.out.println("****************************************");
-
-//									System.out.println("noOfRows: " + noOfRows);
 							if(noOfRows == count)
 							{
 								distinct = true;
@@ -1282,8 +917,6 @@ public class NFAnalyzer {
 
 			}//end of for i < numKeyAtts
 
-//			System.out.println("numKeyAtts: " + numKeyAtts);
-//			System.out.println("distinct: " + distinct);
 			if(numKeyAtts > 1)
 			{
 				boolean is1NF = checkCompositeKey(noOfRows);//check for the 3rd case
@@ -1347,8 +980,6 @@ public class NFAnalyzer {
 		{
 			stmt = "select count(distinct concat(concat(" + concatKeys + "), " + concatKeysSet2 + ")) as count from "  + originalTable.getTableName();
 			formatSQL(stmt);
-			//sqlScript.add(stmt);
-//			System.out.println("key atts = 3, stmt = " + stmt);
 		}
 		else
 		{
@@ -1385,16 +1016,6 @@ public class NFAnalyzer {
 	public ArrayList<String> getSQLScript() {
 		return sqlScript;
 	}
-
-
-	// TEST:
-//	public void outputSQLScript(){
-////		System.out.println("sqlScript.size()? " + sqlScript.size());
-////		System.out.println("SQL script for table " + tableName);
-//		for (String s : sqlScript){
-//			System.out.println(s);
-//		}
-//	}
 	
 	
 	public boolean isTwoNF(){
@@ -1402,18 +1023,6 @@ public class NFAnalyzer {
 			
 
 			String huh = "select * from " + originalTable.getTableName();
-//			try{
-//				
-//					System.out.println("table: " + originalTable.getTableName());
-//					ResultSet huhrs = dbconn.executeQuery(huh);
-//					while (huhrs.next()){
-//						System.out.println(huhrs.getString(1));
-//					}
-//				}
-//			
-//			catch(SQLException e){
-//				System.out.println(e);
-//			}
 
 		ArrayList<Attribute> nonKeyAttributes = originalTable.getNonKeyAttributes();
 		String query = "";
@@ -1455,25 +1064,13 @@ public class NFAnalyzer {
 							originalTable.setTwoNF(false);
 							String s = "";
 
-							// this approach of storing the dependencies in an unbroken
-							// string doesn't work for att names > 1!
-							// but we can use the lhs as a hashtable key
 							FunctionalDependency fd = new FunctionalDependency();
 							fd.addLeft(katt);
 							fd.addRight(nkatt);
 							s = s + katt;
 //							s = s + nkatt;
 							originalTable.addKsubToNkaDep(s, fd);
-//							System.out.println("isTwoNF: " + s);
 
-//							originalTable.addOneNFDependencies(s);
-							//s could be BC or NC etc. this is stored as String, we can use String str = tableName.getTwoNFDependencies()
-							//and str.get(0) is B, str.get(1) is C; which can be used to decompose the tables or to print the output
-							//like B->C
-
-							// and if the attribute names aren't single letters??
-
-							//		System.out.println("@2nf? k: " + hs.get(k).getName() + " --> " + nonKeyAttributes.get(j).getName());
 						}  // end if
 					}
 					catch(SQLException e){
@@ -1505,9 +1102,6 @@ public class NFAnalyzer {
 							originalTable.setTwoNF(false);
 							String s = "";
 
-							// this approach of storing the dependencies in an unbroken
-							// string doesn't work for att names > 1!
-							
 							FunctionalDependency fd = new FunctionalDependency();
 							fd.addLeft(katt1);
 							fd.addLeft(katt2);
@@ -1518,18 +1112,7 @@ public class NFAnalyzer {
 							s = s + katt1;
 							s = s + katt2;
 							originalTable.addKsubToNkaDep(s, fd);
-//							s = s + nkatt;
-//							System.out.println("isTwoNF: " + s);
 
-							// TODO comment out
-//							originalTable.addOneNFDependencies(s);
-							//s could be BC or NC etc. this is stored as String, we can use String str = tableName.getTwoNFDependencies()
-							//and str.get(0) is B, str.get(1) is C; which can be used to decompose the tables or to print the output
-							//like B->C
-
-							// and if the attribute names aren't single letters??
-
-							//		System.out.println("@2nf? k: " + hs.get(k).getName() + " --> " + nonKeyAttributes.get(j).getName());
 						}
 					}
 					catch(SQLException e){
@@ -1540,7 +1123,7 @@ public class NFAnalyzer {
 
 		}  //end for set
 
-//		System.out.println("dependencies: " + dependencies);
+
 		if(dependencies)
 		{
 			originalTable.setTwoNF(false);
@@ -1577,8 +1160,6 @@ public class NFAnalyzer {
 		sqlScript.add(from);
 		sqlScript.add(where);
 		sqlScript.add("");
-		
-		//String SQL = '\n' + select + '\n' + from + '\n' + where + '\n';
 		
 	}
 	
